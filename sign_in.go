@@ -9,6 +9,7 @@ import (
 	"github.com/gofor-little/xerror"
 )
 
+// SignIn will attempt to sign a user in, returning the result.
 func SignIn(ctx context.Context, emailAddress string, password string) (*types.AuthenticationResultType, error) {
 	if err := checkPackage(); err != nil {
 		return nil, xerror.Wrap("checkPackage call failed", err)

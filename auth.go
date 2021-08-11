@@ -11,11 +11,16 @@ import (
 )
 
 var (
+	// CognitoClient is the client that interacts with Cognito.
 	CognitoClient           *cognitoidentityprovider.Client
+	// CognitoUserPoolID is the id of the user pool in Cognito.
 	CognitoUserPoolID       string
+	// CognitoUserPoolClientID is the id of the user pool client in Cognito.
 	CognitoUserPoolClientID string
 )
 
+// Initialize will initialize the auth package. Both profile and region parameters are option if authentication can be
+// achieved via another method. For example, environment variables or IAM roles.
 func Initialize(ctx context.Context, profile string, region string, cognitoUserPoolID string, cognitoClientID string) error {
 	var cfg aws.Config
 	var err error
