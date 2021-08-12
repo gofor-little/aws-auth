@@ -15,8 +15,8 @@ var (
 	CognitoClient           *cognitoidentityprovider.Client
 	// CognitoUserPoolID is the id of the user pool in Cognito.
 	CognitoUserPoolID       string
-	// CognitoUserPoolClientID is the id of the user pool client in Cognito.
-	CognitoUserPoolClientID string
+	// CognitoClientID is the id of the user pool client in Cognito.
+	CognitoClientID string
 )
 
 // Initialize will initialize the auth package. Both profile and region parameters are option if authentication can be
@@ -36,7 +36,7 @@ func Initialize(ctx context.Context, profile string, region string, cognitoUserP
 
 	CognitoClient = cognitoidentityprovider.NewFromConfig(cfg)
 	CognitoUserPoolID = cognitoUserPoolID
-	CognitoUserPoolClientID = cognitoClientID
+	CognitoClientID = cognitoClientID
 
 	return nil
 }
@@ -46,7 +46,7 @@ func checkPackage() error {
 		return xerror.New("db.CognitoClient is nil, have you called auth.Initialize()?")
 	}
 
-	if CognitoUserPoolClientID == "" {
+	if CognitoClientID == "" {
 		return xerror.New("db.CognitoClientID is empty, did you call auth.Initialize()?")
 	}
 

@@ -32,14 +32,14 @@ func setup(t *testing.T) {
 
 	// Create the user pool and set the id for the auth package.
 	userPoolOutput, err := auth.CognitoClient.CreateUserPool(context.Background(), &cognitoidentityprovider.CreateUserPoolInput{
-		PoolName: aws.String(fmt.Sprintf("waste-scanner-test-user-pool_%d", time.Now().UnixNano())),
+		PoolName: aws.String(fmt.Sprintf("aws-auth-test-user-pool_%d", time.Now().UnixNano())),
 	})
 	require.NoError(t, err)
 	auth.CognitoUserPoolID = *userPoolOutput.UserPool.Id
 
 	// Create the user pool client and set the id for the auth package.
 	userPoolClientOutput, err := auth.CognitoClient.CreateUserPoolClient(context.Background(), &cognitoidentityprovider.CreateUserPoolClientInput{
-		ClientName: aws.String(fmt.Sprintf("waste-scanner-test-user-pool-client_%d", time.Now().UnixNano())),
+		ClientName: aws.String(fmt.Sprintf("aws-auth-test-user-pool-client_%d", time.Now().UnixNano())),
 		UserPoolId: aws.String(auth.CognitoUserPoolID),
 		ExplicitAuthFlows: []types.ExplicitAuthFlowsType{
 			types.ExplicitAuthFlowsTypeAllowUserPasswordAuth,
@@ -47,7 +47,7 @@ func setup(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
-	auth.CognitoUserPoolClientID = *userPoolClientOutput.UserPoolClient.ClientId
+	auth.CognitoClientID = *userPoolClientOutput.UserPoolClient.ClientId
 }
 
 func teardown(t *testing.T) {

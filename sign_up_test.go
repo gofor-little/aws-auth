@@ -14,16 +14,15 @@ func TestSignUp(t *testing.T) {
 	defer teardown(t)
 
 	testCases := []struct {
-		emailAddress         string
-		password             string
-		passwordConfirmation string
+		emailAddress string
+		password     string
 	}{
-		{"john@example.com", "test-Password1234!!", "test-Password1234!!"},
+		{"john@example.com", "test-Password1234!!"},
 	}
 
 	for i, tc := range testCases {
 		t.Run(fmt.Sprintf("TestSignUp_%d", i), func(t *testing.T) {
-			_, err := auth.SignUp(context.Background(), tc.emailAddress, tc.password, tc.passwordConfirmation)
+			_, err := auth.SignUp(context.Background(), tc.emailAddress, tc.password)
 			require.NoError(t, err)
 		})
 	}

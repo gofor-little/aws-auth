@@ -12,7 +12,7 @@ import (
 	auth "github.com/gofor-little/aws-auth"
 )
 
-func TestSignIn(t *testing.T) {
+func TestChangePassword(t *testing.T) {
 	setup(t)
 	defer teardown(t)
 
@@ -24,7 +24,7 @@ func TestSignIn(t *testing.T) {
 	}
 
 	for i, tc := range testCases {
-		t.Run(fmt.Sprintf("TestSignIn_%d", i), func(t *testing.T) {
+		t.Run(fmt.Sprintf("TestChangePassword%d", i), func(t *testing.T) {
 			_, err := auth.SignUp(context.Background(), tc.emailAddress, tc.password)
 			require.NoError(t, err)
 
@@ -35,8 +35,10 @@ func TestSignIn(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			_, err = auth.SignIn(context.Background(), tc.emailAddress, tc.password)
+			output, err := auth.SignIn(context.Background(), tc.emailAddress, tc.password)
 			require.NoError(t, err)
+
+			require.NoError(t, auth.ChangePassword(context.Background(), *output.AuthenticationResult.AccessToken, tc.password, fmt.Sprintf("new-%s", tc.password)))
 		})
 	}
 }

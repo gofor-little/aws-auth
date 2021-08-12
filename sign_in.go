@@ -10,7 +10,7 @@ import (
 )
 
 // SignIn will attempt to sign a user in, returning the result.
-func SignIn(ctx context.Context, emailAddress string, password string) (*types.AuthenticationResultType, error) {
+func SignIn(ctx context.Context, emailAddress string, password string) (*cognitoidentityprovider.InitiateAuthOutput, error) {
 	if err := checkPackage(); err != nil {
 		return nil, xerror.Wrap("checkPackage call failed", err)
 	}
@@ -21,11 +21,11 @@ func SignIn(ctx context.Context, emailAddress string, password string) (*types.A
 			"USERNAME": emailAddress,
 			"PASSWORD": password,
 		},
-		ClientId: aws.String(CognitoUserPoolClientID),
+		ClientId: aws.String(CognitoClientID),
 	})
 	if err != nil {
 		return nil, xerror.Wrap("failed to initiate auth", err)
 	}
 
-	return output.AuthenticationResult, nil
+	return output, nil
 }

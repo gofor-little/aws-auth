@@ -7,12 +7,13 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider"
+	"github.com/aws/aws-sdk-go-v2/service/cognitoidentityprovider/types"
 	"github.com/stretchr/testify/require"
 
 	auth "github.com/gofor-little/aws-auth"
 )
 
-func TestSignIn(t *testing.T) {
+func TestForgotPassword(t *testing.T) {
 	setup(t)
 	defer teardown(t)
 
@@ -24,7 +25,7 @@ func TestSignIn(t *testing.T) {
 	}
 
 	for i, tc := range testCases {
-		t.Run(fmt.Sprintf("TestSignIn_%d", i), func(t *testing.T) {
+		t.Run(fmt.Sprintf("TestForgotPassword%d", i), func(t *testing.T) {
 			_, err := auth.SignUp(context.Background(), tc.emailAddress, tc.password)
 			require.NoError(t, err)
 
@@ -35,7 +36,20 @@ func TestSignIn(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			_, err = auth.SignIn(context.Background(), tc.emailAddress, tc.password)
+			// Set the email verified to true so we can use it in the forgot password request.
+			_, err = auth.CognitoClient.AdminUpdateUserAttributes(context.Background(), &cognitoidentityprovider.AdminUpdateUserAttributesInput{
+				UserAttributes: []types.AttributeType{
+					{
+						Name:  aws.String("email_verified"),
+						Value: aws.String("true"),
+					},
+				},
+				UserPoolId: aws.String(auth.CognitoUserPoolID),
+				Username:   aws.String(tc.emailAddress),
+			})
+			require.NoError(t, err)
+
+			_, err = auth.ForgotPassword(context.Background(), tc.emailAddress)
 			require.NoError(t, err)
 		})
 	}
