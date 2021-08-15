@@ -9,6 +9,10 @@ import (
 )
 
 // ForgotPassword will initiate a forgot password request.
+//
+// - Use auth.ChangePassword and auth.ChangePasswordConfirm to update a user's password that doesn't require resetting.
+//
+// - Use auth.SetPassword if the user has a requirement for their password to be reset.
 func ForgotPassword(ctx context.Context, emailAddress string) (*cognitoidentityprovider.ForgotPasswordOutput, error) {
 	output, err := CognitoClient.ForgotPassword(ctx, &cognitoidentityprovider.ForgotPasswordInput{
 		ClientId: aws.String(CognitoClientID),

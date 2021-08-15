@@ -9,6 +9,10 @@ import (
 )
 
 // ChangePassword changes a user's password.
+//
+// - Use auth.ForgotPassword if the user doesn't know their password.
+//
+// - Use auth.SetPassword if the user has a requirement for their password to be reset.
 func ChangePassword(ctx context.Context, accessToken string, oldPassword string, newPassword string) error {
 	if err := checkPackage(); err != nil {
 		return xerror.Wrap("checkPackage call failed", err)
