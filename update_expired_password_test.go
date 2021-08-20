@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestSetPassword(t *testing.T) {
+func TestUpdateExpiredPassword(t *testing.T) {
 	setup(t)
 	defer teardown(t)
 
@@ -23,7 +23,7 @@ func TestSetPassword(t *testing.T) {
 	}
 
 	for i, tc := range testCases {
-		t.Run(fmt.Sprintf("TestSignIn_%d", i), func(t *testing.T) {
+		t.Run(fmt.Sprintf("TestUpdateExpiredPassword_%d", i), func(t *testing.T) {
 			_, err := auth.CognitoClient.AdminCreateUser(context.Background(), &cognitoidentityprovider.AdminCreateUserInput{
 				UserPoolId:        aws.String(auth.CognitoUserPoolID),
 				Username:          aws.String(tc.emailAddress),
@@ -35,7 +35,7 @@ func TestSetPassword(t *testing.T) {
 			output, err := auth.SignIn(context.Background(), tc.emailAddress, tc.password)
 			require.NoError(t, err)
 
-			_, err = auth.SetPassword(context.Background(), *output.Session, tc.emailAddress, tc.password)
+			_, err = auth.UpdateExpiredPassword(context.Background(), *output.Session, tc.emailAddress, tc.password)
 			require.NoError(t, err)
 		})
 	}

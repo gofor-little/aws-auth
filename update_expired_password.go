@@ -9,13 +9,13 @@ import (
 	"github.com/gofor-little/xerror"
 )
 
-// SetPassword sets a password for a user that has a requirement for their password to be changed. The session parameter
-// can be obtained from the output.Session return value of auth.SignIn.
+// UpdateExpiredPassword updates a password for a user that has a requirement for their password to be changed.
+// The session parameter can be obtained from the output.Session return value of auth.SignIn.
 //
 // - Use auth.ForgotPassword if the user doesn't know their password.
 //
 // - Use auth.ChangePassword and auth.ChangePasswordConfirm to update a user's password that doesn't require resetting.
-func SetPassword(ctx context.Context, session string, emailAddress string, password string) (*cognitoidentityprovider.RespondToAuthChallengeOutput, error) {
+func UpdateExpiredPassword(ctx context.Context, session string, emailAddress string, password string) (*cognitoidentityprovider.RespondToAuthChallengeOutput, error) {
 	output, err := CognitoClient.RespondToAuthChallenge(ctx, &cognitoidentityprovider.RespondToAuthChallengeInput{
 		ChallengeName: types.ChallengeNameTypeNewPasswordRequired,
 		ClientId:      aws.String(CognitoClientID),

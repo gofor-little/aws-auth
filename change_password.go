@@ -12,7 +12,7 @@ import (
 //
 // - Use auth.ForgotPassword if the user doesn't know their password.
 //
-// - Use auth.SetPassword if the user has a requirement for their password to be reset.
+// - Use auth.UpdateExpiredPassword if the user has a requirement for their password to be changed.
 func ChangePassword(ctx context.Context, accessToken string, oldPassword string, newPassword string) error {
 	if err := checkPackage(); err != nil {
 		return xerror.Wrap("checkPackage call failed", err)
